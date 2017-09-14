@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * Created by PhpStorm.
+ * User: kubra
+ * Date: 23.08.2017
+ * Time: 17:43
+ */
+class Example_md extends CI_Model
+{
+    private $tables = 'example_table';
+
+    public function __construct()
+    {
+        parent::__construct();
+
+    }//end function
+
+
+    public function datalistele()
+    {
+
+        $result = $this->db->get($this->tables);
+
+        if ($result->num_rows() > 0) {
+            $result = $result->result();
+            return $result;
+        } else {
+            return false;
+        }//end function
+
+
+    }//end function
+
+
+    public function dataadd($data)
+    {
+        if (isset($data) && !empty($data)) {
+            $inserti = $this->db->insert($this->tables, $data);
+            if ($inserti) {
+                return $this->db->insert_id();
+            } else {
+                return false;
+            }//end if
+        }//end if
+    }//end function
+
+    public function datadelete($id)
+    {
+
+        if (isset($id) && !empty($id)) {
+            $this->db->where('id', $this->db->escape_str($id));
+            $delete = $this->db->delete($this->tables);
+
+            if ($delete) {
+                return true;
+            } else {
+                return false;
+            }//end if
+
+        } else {
+            return false;
+        }//end if
+    }//end fucntion
+
+
+    public function editdatalist($id)
+    {
+
+        if (isset($id) && !empty($id) && is_int($id)) {
+
+            $this->db->where('id', $this->db->escape_str($id));
+            $this->db->limit(1);
+            $result = $this->db->get($this->tables);
+            if ($result->num_rows() > 0) {
+                $result = $result->result_array();
+                return $result;
+            }
+
+        } else {
+            return false;
+        }
+
+
+    }//end fucntion
+
+
+    public function dataedit($id, $data)
+    {
+        $id = intval($id);
+        if (isset($id) && !empty($id) && isset($data) && !empty($data)) {
+            $this->db->where('id', $this->db->escape_str($id));
+            $useredit = $this->db->update($this->tables, $data);
+            if ($useredit) {
+                return $id;
+            } else {
+                return false;
+            }//end if
+
+        } else {
+            return false;
+        }//end if
+    }//end function
+
+
+
+
+
+}//end class
